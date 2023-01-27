@@ -1,12 +1,18 @@
+const { errorHandler } = require('./middlware/errorMiddleware')
+
 // Configuring .env file
 const dotenv = require('dotenv').config()
 
 // Importing and setting up basic express
 const express = require('express')
+
 // Port will try .env port and will default to 8000
 const PORT = process.env.PORT || 8000
 const app = express()
 
+// Middleware that allows data to be sent as raw json
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 app.get('/', (req, res) => {
     res.send('hey')
@@ -15,6 +21,8 @@ app.get('/', (req, res) => {
 // User Routes
 app.use('/api/users', require('./routes/userRoutes'))
 
+// Custom errorHandler as middleware
+app.use(errorHandler)
 
 // Serving express on port 5000
 app.listen(PORT, () => { console.log('Pinged') })
