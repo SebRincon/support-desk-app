@@ -36,7 +36,7 @@ const registerUser = asyncHandler(async(req, res) => {
     }
     else { 
         res.status(400)
-        throw new error('Invalid user data')
+        throw new Error('Invalid user data')
     }
 
 })
@@ -45,8 +45,22 @@ const registerUser = asyncHandler(async(req, res) => {
 // @desc Login a new user
 // @route /api/users/login
 // @access Public 
-const loginUser = asyncHandler(async(req, res) => { 
-    res.send('login Route')
+const loginUser = asyncHandler(async (req, res) => { 
+    const { email, password } = req.body
+    const user = await User.findOne({ email })
+    
+    // Check there is a user and if password match
+    if (user && (await bcrypt.compare(password, user.password))) {
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email
+        })
+    }
+    else { 
+        res.status(401)
+        throw new Error('Invalid Credentials')
+    }
 })
 
 module.exports = {
