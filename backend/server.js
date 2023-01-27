@@ -1,7 +1,11 @@
 const { errorHandler } = require('./middlware/errorMiddleware')
-
+const connectDB = require('./config/db')
+const colors = require('colors')
 // Configuring .env file
 const dotenv = require('dotenv').config()
+
+// Connect to Database
+connectDB()
 
 // Importing and setting up basic express
 const express = require('express')
