@@ -10,7 +10,11 @@ const app = express()
 
 app.get('/', (req, res) => {
     res.send('hey')
- })
+})
+
+// User Routes
+app.use('/api/users', require('./routes/userRoutes'))
+
 
 // Serving express on port 5000
 app.listen(PORT, () => { console.log('Pinged') })
