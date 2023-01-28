@@ -9,6 +9,8 @@ import App from "./App";
 import "./index.css";
 import Home from "./pages/Home";
 import Header from "./components/Header";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,7 @@ const router = createBrowserRouter([
       <div className="container">
         <Header />
         <App />
+        <ToastContainer />
       </div>
     ),
   },
@@ -26,6 +29,7 @@ const router = createBrowserRouter([
       <div className="container">
         <Header />
         <Login />
+        <ToastContainer />
       </div>
     ),
   },
@@ -35,6 +39,7 @@ const router = createBrowserRouter([
       <div className="container">
         <Header />
         <Register />
+        <ToastContainer />
       </div>
     ),
   },
