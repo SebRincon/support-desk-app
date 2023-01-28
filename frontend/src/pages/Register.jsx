@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { register } from "../features/auth/authSlice";
+import { register, reset } from "../features/auth/authSlice";
 
 function Register() {
+  // Setup for from state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,11 +16,27 @@ function Register() {
   const { name, email, password, password2 } = formData;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Fetching state values from the state object auth
-  const { user, isLoading, isSuccess, message } = useSelector(
+  // Fetching state values from the state object -> auth
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
   );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    // Redirect when logged in
+    if (isSuccess || user) {
+      navigate("/");
+    }
+    // reset state
+    dispatch(reset());
+
+    // Deps
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   // Generic on change function that handles changes for all forms
   const onChange = (e) => {
