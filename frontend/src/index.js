@@ -7,7 +7,6 @@ import Login from "./pages/Login";
 import React from "react";
 import App from "./App";
 import "./index.css";
-import Home from "./pages/Home";
 import Header from "./components/Header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

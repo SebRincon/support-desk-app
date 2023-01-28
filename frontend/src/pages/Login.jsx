@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import { FaSignInAlt } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../features/auth/authSlice";
 
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { name, email, password, password2 } = formData;
+  const { email, password } = formData;
 
+  const dispatch = useDispatch();
+
+  // Fetching state values from the state object auth
+  const { user, isLoading, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  // Generic on change function that handles changes for all forms
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -16,8 +25,12 @@ function Login() {
     }));
   };
 
+  // Handle the user login function
   const onSubmit = (e) => {
     e.preventDefault();
+
+    const userData = { email, password };
+    dispatch(login(userData));
   };
   return (
     <>
