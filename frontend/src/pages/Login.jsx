@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSignInAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
+import { login, reset } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,25 @@ function Login() {
   const navigate = useNavigate();
 
   // Fetching state values from the state object auth
-  const { isLoading, user, message } = useSelector((state) => state.auth);
+  const { isError, isSuccess, isLoading, user, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    // Redirect when logged in
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    // reset state
+    dispatch(reset());
+
+    // Deps
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   // Generic on change function that handles changes for all forms
   const onChange = (e) => {
@@ -39,9 +57,7 @@ function Login() {
         // getting a good response from our API or catch the AsyncThunkAction
         // rejection to show an error message
         toast.success(`Welcome Back ${user.name}!`);
-        navigate("/");
-      })
-      .catch(toast.error(`Error: ${message}`));
+      });
   };
 
   if (isLoading) {
