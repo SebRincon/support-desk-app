@@ -57,6 +57,7 @@ function Login() {
         // getting a good response from our API or catch the AsyncThunkAction
         // rejection to show an error message
         toast.success(`Welcome Back ${user.name}!`);
+        navigate("/");
       });
   };
 
