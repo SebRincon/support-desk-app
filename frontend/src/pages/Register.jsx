@@ -18,26 +18,6 @@ function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Fetching state values from the state object -> auth
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
-
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-
-    // Redirect when logged in
-    if (isSuccess || user) {
-      navigate("/");
-    }
-    // reset state
-    dispatch(reset());
-
-    // Deps
-  }, [isError, isSuccess, user, message, navigate, dispatch]);
-
   // Generic on change function that handles changes for all forms
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -49,18 +29,29 @@ function Register() {
   // Onsubmit callback that checks passwords and creates new user
   const onSubmit = (e) => {
     e.preventDefault();
-    if (password !== password2) {
-      toast.error("Passwords Do Not Match!");
-    }
-    const userData = {
-      name,
-      email,
-      password,
-    };
 
-    // Dispatch / Call function register w/ userData
-    dispatch(register(userData));
+    if (password !== password2) {
+      toast.error("Passwords do not match");
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      };
+
+      dispatch(register(userData))
+        .unwrap()
+        .then((user) => {
+          // NOTE: by unwrapping the AsyncThunkAction we can navigate the user after
+          // getting a good response from our API or catch the AsyncThunkAction
+          // rejection to show an error message
+          toast.success(`Registered new user - ${user.name}`);
+          navigate("/");
+        })
+        .catch(toast.error);
+    }
   };
+
   return (
     <>
       <section className="heading">
