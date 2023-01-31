@@ -13,6 +13,8 @@ const user = JSON.parse(localStorage.getItem("user"));
 const initialState = {
   user: user ? user : null,
   isLoading: false,
+  isError: false,
+  message: "",
 };
 
 // Register new user
@@ -66,8 +68,11 @@ export const authSlice = createSlice({
         state.user = action.payload;
         state.isLoading = false;
       })
-      .addCase(register.rejected, (state) => {
+      .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
+        state.user = null;
+        state.isError = true;
+        state.message = action.payload;
       })
       .addCase(login.pending, (state) => {
         state.isLoading = false;
@@ -76,8 +81,13 @@ export const authSlice = createSlice({
         state.user = action.payload;
         state.isLoading = false;
       })
-      .addCase(login.rejected, (state) => {
+      .addCase(login.rejected, (state, action) => {
+        console.log("ERROR");
+        console.log(action.payload.message);
         state.isLoading = false;
+        state.user = null;
+        state.isError = true;
+        state.message = action.payload.message;
       });
   },
 });

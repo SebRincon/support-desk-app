@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { FaSignInAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -11,11 +14,10 @@ function Login() {
   const { email, password } = formData;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Fetching state values from the state object auth
-  const { user, isLoading, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoading, user, message } = useSelector((state) => state.auth);
 
   // Generic on change function that handles changes for all forms
   const onChange = (e) => {
@@ -30,8 +32,21 @@ function Login() {
     e.preventDefault();
 
     const userData = { email, password };
-    dispatch(login(userData));
+    dispatch(login(userData))
+      .unwrap()
+      .then((user) => {
+        // NOTE: by unwrapping the AsyncThunkAction we can navigate the user after
+        // getting a good response from our API or catch the AsyncThunkAction
+        // rejection to show an error message
+        toast.success(`Welcome Back ${user.name}!`);
+        navigate("/");
+      })
+      .catch(toast.error(`Error: ${message}`));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <>
       <section className="heading">
