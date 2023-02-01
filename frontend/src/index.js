@@ -10,6 +10,8 @@ import Login from "./pages/Login";
 import React from "react";
 import App from "./App";
 import "./index.css";
+import NewTicket from "./pages/NewTicket";
+import PrivateRoute from "./components/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,26 @@ const router = createBrowserRouter([
         <ToastContainer />
       </div>
     ),
+  },
+  {
+    path: "/new-ticket",
+    element: (
+      <div className="container">
+        <Header />
+        <PrivateRoute />
+        <ToastContainer />
+      </div>
+    ),
+    children: [
+      {
+        path: "/new-ticket",
+        element: (
+          <div className="container">
+            <NewTicket />
+          </div>
+        ),
+      },
+    ],
   },
 ]);
 
