@@ -12,6 +12,7 @@ import App from "./App";
 import "./index.css";
 import NewTicket from "./pages/NewTicket";
 import PrivateRoute from "./components/PrivateRoute";
+import Tickets from "./pages/Tickets";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,26 @@ const router = createBrowserRouter([
         element: (
           <div className="container">
             <NewTicket />
+          </div>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/tickets",
+    element: (
+      <div className="container">
+        <Header />
+        <PrivateRoute />
+        <ToastContainer />
+      </div>
+    ),
+    children: [
+      {
+        path: "/tickets",
+        element: (
+          <div className="container">
+            <Tickets />
           </div>
         ),
       },
