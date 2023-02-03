@@ -13,6 +13,7 @@ import "./index.css";
 import NewTicket from "./pages/NewTicket";
 import PrivateRoute from "./components/PrivateRoute";
 import Tickets from "./pages/Tickets";
+import Ticket from "./pages/Ticket";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,26 @@ const router = createBrowserRouter([
         element: (
           <div className="container">
             <Tickets />
+          </div>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/ticket/:ticketId",
+    element: (
+      <div className="container">
+        <Header />
+        <PrivateRoute />
+        <ToastContainer />
+      </div>
+    ),
+    children: [
+      {
+        path: "/ticket/:ticketId",
+        element: (
+          <div className="container">
+            <Ticket />
           </div>
         ),
       },
